@@ -1,4 +1,4 @@
-# HarmFree Emporium (HFE) — website, phase one
+# HarmFree Emporium (HFE) - website, phase one
 
 *HarmFree to Humans, Animals, Plants, and Planets.*
 
