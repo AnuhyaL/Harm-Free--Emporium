@@ -1,0 +1,93 @@
+/*
+ * HFE design tokens — "Ivory & Forest" palette (client-supplied).
+ * Every color in the app resolves through these variables.
+ * Values are space-separated RGB triplets so Tailwind can apply alpha.
+ *
+ *   Warm Ivory #FAF9F5 · Soft Sage #EEF2EA · Deep Forest Green #294438 · Sage Green #879B86
+ *   Soft Terracotta #C98268 · Warm Sand #D8C7A5 · Charcoal #252A27 · Muted Gray #68706A · White
+ *
+ * Contrast (WCAG 2.1 AA): Charcoal on Ivory 14.5:1 · Muted Gray on Ivory 4.9:1, on Soft Sage 4.5:1 ·
+ * White on Forest 10.6:1 · Forest links on Ivory 10.3:1 · Charcoal on Terracotta 4.8:1.
+ * Terracotta and Sage Green are used as fills/decoration, not for small text on light grounds.
+ */
+:root {
+  /* Brand roles (token names kept from the original board so component code is unchanged) */
+  --hfe-paper: 255 255 255;   /* Pure White */
+  --hfe-mist: 238 242 234;    /* Soft Sage — secondary background */
+  --hfe-sage: 216 199 165;    /* Warm Sand — highlight */
+  --hfe-sky: 135 155 134;     /* Sage Green — secondary green */
+  --hfe-slate: 104 112 106;   /* Muted Gray */
+  --hfe-emerald: 41 68 56;    /* Deep Forest Green — feature bands */
+  --hfe-navy: 37 42 39;       /* Charcoal — footer, banner, video overlay */
+  --hfe-gold: 201 130 104;    /* Soft Terracotta — accent */
+
+  /* Sol the mascot */
+  --sol-light: 135 155 134;   /* Sage Green */
+  --sol-deep: 41 68 56;       /* Deep Forest Green */
+
+  /* Brand aliases for Tailwind (paper, mist, sage, sky, emerald, navy) */
+  --paper: var(--hfe-paper);
+  --mist: var(--hfe-mist);
+  --sage: var(--hfe-sage);
+  --sky: var(--hfe-sky);
+  --emerald: var(--hfe-emerald);
+  --navy: var(--hfe-navy);
+
+  /* Semantic — light (default) */
+  --bg: 250 249 245;           /* Warm Ivory */
+  --surface: 255 255 255;      /* Pure White */
+  --tint: var(--hfe-mist);     /* Soft Sage */
+  --card: 244 246 240;
+  --fg: 37 42 39;              /* Charcoal */
+  --muted: 104 112 106;        /* Muted Gray */
+  --line: 225 229 220;
+  --link: 41 68 56;            /* Deep Forest Green */
+  --primary: 41 68 56;         /* Deep Forest Green */
+  --primary-fg: 255 255 255;
+  --gold: var(--hfe-gold);     /* Soft Terracotta */
+  --gold-fg: 37 42 39;         /* Charcoal */
+  --success: 46 110 72;
+  --danger: 168 52 40;
+  --shadow: 37 42 39;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: 22 26 24;
+    --surface: 30 36 33;
+    --tint: 36 50 43;
+    --card: 34 42 38;
+    --fg: 250 249 245;         /* Warm Ivory */
+    --muted: 184 192 184;
+    --line: 54 64 58;
+    --link: 216 199 165;       /* Warm Sand */
+    --primary: 216 199 165;    /* Warm Sand buttons */
+    --primary-fg: 37 42 39;
+    --gold: 212 150 126;       /* Terracotta, lifted for dark grounds */
+    --gold-fg: 37 42 39;
+    --success: 150 205 165;
+    --danger: 245 160 145;
+    --shadow: 0 0 0;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme='dark'] {
+  --bg: 22 26 24;
+  --surface: 30 36 33;
+  --tint: 36 50 43;
+  --card: 34 42 38;
+  --fg: 250 249 245;
+  --muted: 184 192 184;
+  --line: 54 64 58;
+  --link: 216 199 165;
+  --primary: 216 199 165;
+  --primary-fg: 37 42 39;
+  --gold: 212 150 126;
+  --gold-fg: 37 42 39;
+  --success: 150 205 165;
+  --danger: 245 160 145;
+  --shadow: 0 0 0;
+  color-scheme: dark;
+}

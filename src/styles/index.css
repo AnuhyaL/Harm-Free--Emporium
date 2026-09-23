@@ -1,0 +1,52 @@
+@import './tokens.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+  body {
+    @apply bg-bg text-fg font-sans text-base antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  h1, h2, h3, h4 { @apply font-display tracking-tight; font-optical-sizing: auto; }
+  a { @apply text-link underline-offset-4; }
+  :focus-visible { outline: 3px solid rgb(var(--link)); outline-offset: 2px; border-radius: 6px; }
+  ::selection { background: rgb(var(--hfe-sage)); color: rgb(var(--hfe-navy)); }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+  }
+}
+
+@layer components {
+  .container-hfe { @apply mx-auto w-full max-w-content px-4 sm:px-6 lg:px-8; }
+  .eyebrow { @apply text-xs font-semibold uppercase tracking-[0.16em] text-muted; }
+  .card { @apply rounded-card border border-line bg-surface shadow-soft; }
+  .input {
+    @apply block w-full rounded-soft border border-line bg-surface px-3 py-2.5 text-base text-fg placeholder:text-muted/80
+      transition-colors duration-200 focus:border-link focus:outline-none focus:ring-2 focus:ring-link/40
+      aria-[invalid=true]:border-danger;
+  }
+  .label { @apply mb-1.5 block text-sm font-medium text-fg; }
+  .chip { @apply inline-flex items-center gap-1 rounded-full border border-line bg-tint px-2.5 py-0.5 text-xs font-medium text-fg; }
+  .gold-rule { height: 1px; background: linear-gradient(90deg, transparent, rgb(var(--gold)), transparent); }
+  .prose-hfe p { @apply mb-4 leading-relaxed; }
+  .prose-hfe h2 { @apply mb-3 mt-8 text-xl font-semibold; }
+  .prose-hfe h3 { @apply mb-2 mt-6 text-lg font-semibold; }
+  .prose-hfe ul { @apply mb-4 list-disc space-y-1 pl-6; }
+  .prose-hfe ol { @apply mb-4 list-decimal space-y-1 pl-6; }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { scrollbar-width: none; }
+  .skeleton { @apply animate-pulse rounded-soft bg-line/60; }
+}
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes popIn { from { opacity: 0; transform: translate(-50%, -48%) scale(0.98); } to { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
+@keyframes slideInRight { from { transform: translateX(100%); } to { transform: translateX(0); } }
+@keyframes slideInLeft { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes menuIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
