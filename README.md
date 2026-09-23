@@ -29,9 +29,9 @@ To start over, go to **Account → Profile & addresses → Reset demo data**.
 
 | Number | Result |
 |---|---|
-| `4242 4242 4242 4242` | Visa — approved |
-| `5555 5555 5555 4444` | Mastercard — approved |
-| `3782 822463 10005` | Amex — approved (4-digit CVC) |
+| `4242 4242 4242 4242` | Visa - approved |
+| `5555 5555 5555 4444` | Mastercard - approved |
+| `3782 822463 10005` | Amex - approved (4-digit CVC) |
 | `4000 0000 0000 0002` | Declined |
 | `4000 0000 0000 9995` | Insufficient funds |
 
