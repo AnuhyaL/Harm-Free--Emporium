@@ -24,7 +24,7 @@ function Hero() {
           className="max-w-2xl text-paper"
         >
           <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-gold">Vetted · Non-Toxic · Regenerative</p>
-          <h1 className="text-3xl font-semibold leading-[1.05] sm:text-4xl">HarmFree to Humans, Animals, Plants, and Planets.</h1>
+          <h1 className="text-3xl font-semibold leading-[1.05] sm:text-4xl">HarmFree to Humans, Animals, Plants, and Planet.</h1>
           <p className="mt-5 max-w-xl text-lg text-paper/90">
             A global marketplace of products that are non-toxic, bio-based, cleantech, recyclable and compostable, each one checked against the HarmFree Standard before it reaches you.
           </p>
