@@ -2,20 +2,24 @@ import * as Tabs from '@radix-ui/react-tabs';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { api } from '@/api';
-import { Cornucopia } from '@/components/brand/Cornucopia';
+import { Cornucopia, type CornucopiaItem } from '@/components/brand/Cornucopia';
 import { HeroVideo } from '@/components/brand/HeroVideo';
 import { CountUp, EarnTiles, EarthCoinArt, PostCard, ReviewCard } from '@/components/content/ContentBits';
 import { NewsletterForm } from '@/components/layout/NewsletterForm';
 import { VALUE_TAGS } from '@/components/layout/Header';
 import { ProductRail } from '@/components/product/ProductRail';
 import { ButtonLink, Icon, Section, Seo, Skeleton, Stars, type IconName } from '@/components/ui';
-import { categoryGroups, ORG, PILLARS, vendors } from '@/data';
+import { categoryByName, categoryGroups, ORG, PILLARS, vendors } from '@/data';
 import { useAsync } from '@/lib/hooks';
 
 function Hero() {
   const summary = useAsync(() => api.reviews.summary(), []);
   return (
-    <HeroVideo>
+    <HeroVideo
+      sources={[]}
+      poster="/images/hero.jpg"
+      posterAlt="Shoppers at an outdoor market stall under a HarmFree Emporium sign, browsing soaps, brushes and refill jars."
+    >
       <div className="container-hfe flex min-h-[560px] items-center py-20 sm:min-h-[640px] lg:min-h-[78vh]">
         <motion.div
           initial={{ opacity: 0, y: 12 }}
@@ -84,12 +88,41 @@ function TrustBar() {
   );
 }
 
+// What spills out of the cornucopia: a spread of categories across the groups, with short display names.
+const CORNUCOPIA: [category: string, label: string][] = [
+  ['Non-toxic and biodegradable cleaner', 'Non-toxic cleaners'],
+  ['Clean energy generator (solar & wind)', 'Solar & wind power'],
+  ['Sustainable water purifier', 'Water purifiers'],
+  ['Clean energy cookware', 'Clean cookware'],
+  ['Electric lawn mowers', 'Electric mowers'],
+  ['Eco-friendly personal care', 'Personal care'],
+  ['Sustainable building materials', 'Building materials'],
+  ['Sustainable battery', 'Batteries'],
+  ['Recyclable and compostable dishware', 'Compostable dishware'],
+  ['Sustainable and eco-friendly water bottle', 'Water bottles'],
+  ['Green transportation', 'Green transport'],
+];
+const cornucopiaItems: CornucopiaItem[] = CORNUCOPIA.flatMap(([name, label]) => {
+  const cat = categoryByName(name);
+  return cat ? [{ icon: cat.icon, label, to: `/catalog/${cat.slug}` }] : [];
+});
+
 function ShopByCategory() {
   const counts = useAsync(() => api.catalog.categoryCounts(), []);
-  const glyphs = [...new Set(categoryGroups.flatMap((g) => g.categories.map((c) => c.icon)))] as IconName[];
   return (
     <Section id="categories" eyebrow="Shop by Category" title="Everything a HarmFree life needs, in one place" intro="Thirty-seven categories, from compostable dishware to geothermal heat pumps, all held to the same standard.">
-      <Cornucopia glyphs={glyphs} className="mx-auto mb-6 w-full max-w-3xl" />
+      <div className="mb-10 grid items-center gap-8 lg:grid-cols-2">
+        <Cornucopia items={cornucopiaItems} className="mx-auto w-full max-w-xl" />
+        <img
+          src="/images/eco-robot-cutout.webp"
+          alt="A friendly white robot with a leaf sprout pushes a shopping cart full of reusable bottles, brushes and plants toward the cornucopia."
+          width={900}
+          height={898}
+          loading="lazy"
+          decoding="async"
+          className="mx-auto w-full max-w-lg drop-shadow-[0_16px_18px_rgb(0_0_0/0.15)]"
+        />
+      </div>
       <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {categoryGroups.map((g, i) => {
           const total = g.categories.reduce((s, c) => s + (counts.data?.[c.slug] ?? 0), 0);

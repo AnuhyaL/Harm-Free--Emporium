@@ -6,6 +6,7 @@
  *   visitors who prefer reduced motion.
  * - If autoplay is blocked (e.g. battery saver), it shows "Play" instead of failing silently.
  * - If the file is missing, it stays on the poster.
+ * - Pass `sources={[]}` to show the poster as a still hero image with no video or Pause control.
  */
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { Icon } from '@/components/ui/Icon';
@@ -66,7 +67,7 @@ export function HeroVideo({
         {...{ fetchpriority: 'high' }}
         decoding="async"
       />
-      {mountVideo && !failed && (
+      {mountVideo && sources.length > 0 && !failed && (
         <video
           ref={ref}
           className={`absolute inset-0 -z-10 h-full w-full object-cover transition-opacity duration-700 ${ready ? 'opacity-100' : 'opacity-0'}`}

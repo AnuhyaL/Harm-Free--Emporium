@@ -10,6 +10,7 @@ const c = (v: string, a = 1) => `rgb(var(${v}) / ${a})`;
 
 /** Cover art for posts until editorial photography exists. */
 export function PostCover({ post, className }: { post: Post; className?: string }) {
+  if (post.image) return <img src={post.image.src} alt={post.image.alt} loading="lazy" decoding="async" className={`object-cover ${className ?? ''}`} />;
   const grounds = ['--hfe-emerald', '--hfe-navy'];
   const g = grounds[post.hue % 2];
   return (

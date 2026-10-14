@@ -1,61 +1,138 @@
 /**
- * Cornucopia illustration — placeholder SVG. Isolated and swappable: pass `art` to replace it.
- * Category glyphs spill out of the horn to show the diversity of the catalog.
+ * Cornucopia illustration — category bubbles rest inside the horn. Touching the horn (hover, tap or
+ * keyboard) spills them out with their names for a few seconds, then they tumble back in.
+ * Hovering a bubble holds them out so it can be clicked; each bubble links to its category.
  */
 import { motion, useReducedMotion } from 'framer-motion';
-import type { ReactNode } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { iconPath, type IconName } from '@/components/ui/Icon';
 
 const c = (v: string, a = 1) => `rgb(var(${v}) / ${a})`;
 
+export interface CornucopiaItem {
+  icon: IconName;
+  label: string;
+  to: string;
+}
+
 interface Props {
-  glyphs: IconName[];
-  art?: ReactNode;
+  items: CornucopiaItem[];
   className?: string;
 }
 
-export function Cornucopia({ glyphs, art, className }: Props) {
-  const reduce = useReducedMotion();
-  if (art) return <div className={className}>{art}</div>;
+// All positions are on a 600×480 canvas. MOUTH is where the bubbles hide inside the basket.
+const MOUTH = [200, 365];
+// Bubble centers, nearest the mouth first so the stagger reads as a spill.
+const SPOTS = [
+  [380, 290], [350, 405], [315, 175], [470, 405], [510, 290], [445, 175],
+  [250, 60], [550, 405], [380, 60], [550, 175], [510, 60],
+];
+const BUBBLE = 66; // bubble diameter in canvas units (11% of 600)
+const GROUNDS = ['--hfe-mist', '--hfe-paper', '--hfe-sky'];
+const OPEN_MS = 5000;
 
-  // Positions along an arc spilling to the right of the horn mouth.
-  const spots = [
-    [300, 70], [360, 118], [300, 150], [410, 70], [460, 150], [380, 190], [520, 98], [540, 190], [450, 230], [600, 150],
-  ];
+export function Cornucopia({ items, className }: Props) {
+  const reduce = useReducedMotion();
+  const [open, setOpen] = useState(false);
+  const timer = useRef<number>();
+  const shown = items.slice(0, SPOTS.length);
+
+  const scheduleClose = () => {
+    window.clearTimeout(timer.current);
+    timer.current = window.setTimeout(() => setOpen(false), OPEN_MS);
+  };
+  const spill = () => {
+    setOpen(true);
+    scheduleClose();
+  };
+  const hold = () => window.clearTimeout(timer.current);
+  useEffect(() => () => window.clearTimeout(timer.current), []);
 
   return (
-    <svg viewBox="0 0 680 280" className={className} role="img" aria-label="Illustration: a cornucopia spilling out every HarmFree product category">
-      <defs>
-        <linearGradient id="horn" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0" stopColor={c('--hfe-gold', 0.55)} />
-          <stop offset="1" stopColor={c('--hfe-gold')} />
-        </linearGradient>
-      </defs>
-      {/* horn */}
-      <path d="M40 210C40 150 120 60 250 50c30 40 34 120 0 170C170 240 90 250 40 210z" fill="url(#horn)" />
-      <path d="M40 210c30-10 60-60 70-120m-10 150c40-20 70-80 80-150m-6 170c30-40 50-110 44-170" fill="none" stroke={c('--hfe-navy', 0.25)} strokeWidth="3" strokeLinecap="round" />
-      <ellipse cx="248" cy="135" rx="22" ry="86" fill={c('--hfe-emerald', 0.85)} />
-      <path d="M40 210c-14 10-26 26-18 40 12-2 22-14 24-30" fill={c('--hfe-gold', 0.7)} />
-      {/* leaves spilling */}
-      <path d="M262 80c40-30 80-30 110-10-30 20-70 26-110 10z" fill={c('--hfe-sage')} />
-      <path d="M262 200c50 20 90 10 120-16-40-8-80-4-120 16z" fill={c('--hfe-sage', 0.8)} />
-      {glyphs.slice(0, spots.length).map((g, i) => {
-        const [x, y] = spots[i];
-        return (
-          <motion.g
-            key={g + i}
-            initial={reduce ? false : { x: -40, scale: 0.8 }}
-            whileInView={{ x: 0, scale: 1 }}
-            viewport={{ once: true, amount: 0.4 }}
-            transition={{ duration: 0.3, delay: reduce ? 0 : 0.05 * i, ease: 'easeOut' }}
-          >
-            <circle cx={x} cy={y} r="30" fill={c(i % 3 === 0 ? '--hfe-mist' : i % 3 === 1 ? '--hfe-paper' : '--hfe-sky', 0.95)} stroke={c('--hfe-gold', 0.8)} strokeWidth="1.5" />
-            <svg x={x - 17} y={y - 17} width="34" height="34" viewBox="0 0 24 24">
-              <path d={iconPath(g)} fill="none" stroke={c('--hfe-emerald')} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </motion.g>
-        );
-      })}
-    </svg>
+    <div className={className}>
+      <div className="relative aspect-[5/4] w-full">
+        <ul aria-label="Featured categories">
+          {shown.map((it, i) => {
+            const [x, y] = SPOTS[i];
+            // Offset back to the mouth, in multiples of the bubble's own size.
+            const home = { x: `${((MOUTH[0] - x) / BUBBLE) * 100}%`, y: `${((MOUTH[1] - y) / BUBBLE) * 100}%` };
+            const order = open ? i : shown.length - 1 - i;
+            return (
+              <li
+                key={it.to}
+                className={`absolute aspect-square w-[11%] -translate-x-1/2 -translate-y-1/2 ${open ? '' : 'pointer-events-none'}`}
+                style={{ left: `${x / 6}%`, top: `${y / 4.8}%` }}
+              >
+                <motion.div
+                  className="h-full w-full"
+                  initial={false}
+                  animate={open ? { x: 0, y: 0, scale: 1, opacity: 1, rotate: 0 } : { ...(reduce ? {} : home), scale: reduce ? 1 : 0.2, opacity: 0, rotate: reduce ? 0 : -90 }}
+                  transition={
+                    reduce
+                      ? { duration: 0.2 }
+                      : open
+                        ? { type: 'spring', stiffness: 170, damping: 16, delay: 0.06 * order }
+                        : { duration: 0.45, ease: 'easeIn', delay: 0.04 * order }
+                  }
+                >
+                  <Link
+                    to={it.to}
+                    tabIndex={open ? 0 : -1}
+                    aria-hidden={!open}
+                    onMouseEnter={hold}
+                    onMouseLeave={scheduleClose}
+                    onFocus={hold}
+                    onBlur={scheduleClose}
+                    className="block h-full w-full rounded-full no-underline"
+                  >
+                    <span
+                      className="flex h-full w-full items-center justify-center rounded-full border-[1.5px] shadow-soft transition-transform duration-200 hover:scale-110"
+                      style={{ background: c(GROUNDS[i % 3], 0.95), borderColor: c('--hfe-gold', 0.8) }}
+                    >
+                      <svg viewBox="0 0 24 24" className="h-[56%] w-[56%]" aria-hidden>
+                        <path d={iconPath(it.icon)} fill="none" stroke={c('--hfe-emerald')} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </span>
+                    <motion.span
+                      initial={false}
+                      animate={{ opacity: open ? 1 : 0 }}
+                      transition={{ duration: 0.2, delay: open && !reduce ? 0.25 + 0.06 * order : 0 }}
+                      className="absolute left-1/2 top-full mt-1.5 w-[200%] -translate-x-1/2 rounded bg-bg/85 px-1 py-0.5 text-center text-[10px] font-semibold leading-tight text-fg sm:text-xs"
+                    >
+                      {it.label}
+                    </motion.span>
+                  </Link>
+                </motion.div>
+              </li>
+            );
+          })}
+        </ul>
+        {/* Wicker horn, background removed and mirrored so its mouth opens to the right. Drawn above the
+            bubbles so they disappear into it. */}
+        <motion.button
+          type="button"
+          onMouseEnter={spill}
+          onClick={spill}
+          aria-expanded={open}
+          aria-label="Open the cornucopia to show featured categories"
+          className="absolute left-0 top-[47%] z-10 w-[48%] rounded-card"
+          style={{ transformOrigin: '30% 60%' }}
+          animate={reduce ? undefined : open ? { rotate: [0, -6, 3, 0] } : { rotate: 0 }}
+          transition={{ duration: 0.5, ease: 'easeOut' }}
+        >
+          <img
+            src="/images/cornucopia-basket.webp"
+            alt=""
+            width={382}
+            height={335}
+            loading="lazy"
+            decoding="async"
+            className="w-full drop-shadow-[0_12px_14px_rgb(0_0_0/0.18)]"
+          />
+        </motion.button>
+      </div>
+      <p className="mt-2 text-center text-xs text-muted">Touch the cornucopia to see what spills out.</p>
+    </div>
   );
 }

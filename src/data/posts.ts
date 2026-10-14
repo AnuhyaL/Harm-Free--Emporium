@@ -15,6 +15,7 @@ export const posts: Post[] = [
     publishedAt: '2026-08-28T15:00:00.000Z',
     readMinutes: 6,
     hue: 150,
+    image: { src: '/images/journal-refill.jpg', alt: 'Concentrated laundry detergent poured through a steel funnel into a reusable glass bottle.' },
     body: [
       { type: 'p', text: 'Most "green" labels answer one narrow question. Is the packaging recyclable? Is the ingredient plant-derived? The HarmFree Standard starts from a broader one: across its whole life, does this product harm humans, animals, plants or the planet?' },
       { type: 'h2', text: 'Five pillars, reviewed in order' },
@@ -37,6 +38,7 @@ export const posts: Post[] = [
     publishedAt: '2026-08-12T15:00:00.000Z',
     readMinutes: 5,
     hue: 170,
+    image: { src: '/images/journal-refillable-products.jpg', alt: 'Glass spray and foaming-soap bottles beside concentrated refill tablets on a kitchen counter.' },
     body: [
       { type: 'p', text: 'Day one was mostly labeling. Three glass bottles, three tablets, a permanent marker. By day three nobody in the house was reaching for the old plastic sprays under the sink.' },
       { type: 'h2', text: 'What worked' },
@@ -58,6 +60,7 @@ export const posts: Post[] = [
     publishedAt: '2026-07-30T15:00:00.000Z',
     readMinutes: 7,
     hue: 45,
+    image: { src: '/images/journal-repairable-cleantech.jpg', alt: 'A portable power station on an outdoor table with one swappable battery module pulled out.' },
     body: [
       { type: 'p', text: 'Portable power stations have exploded in popularity, and so has a quiet problem: when the battery wears out, most units are thrown away whole.' },
       { type: 'h2', text: 'Designing for the second life' },
@@ -78,6 +81,7 @@ export const posts: Post[] = [
     publishedAt: '2026-07-15T15:00:00.000Z',
     readMinutes: 4,
     hue: 220,
+    image: { src: '/images/journal-regen-media.jpg', alt: 'A laptop showing the HarmFree Emporium vendor site on a desk beside a Regen Media book, a camera on a tripod and natural soaps.' },
     body: [
       { type: 'p', text: 'Earning the HarmFree Seal is the start. Vendors who pass the Standard can also tell their story through the Regen Media family: Regenerative Media TV segments, Digital Regeneration World Magazine features, and product spotlights here on the HFE blog.' },
       { type: 'h2', text: 'What vendors can expect' },
@@ -97,6 +101,7 @@ export const posts: Post[] = [
     publishedAt: '2026-06-20T15:00:00.000Z',
     readMinutes: 5,
     hue: 95,
+    image: { src: '/images/journal-electric-yard.jpg', alt: 'A cordless electric lawn mower, string trimmer, leaf blower and battery packs on a sunlit garden lawn.' },
     body: [
       { type: 'p', text: 'The biggest surprise of switching to electric yard tools was not the lack of fumes. It was hearing birds while mowing.' },
       { type: 'h2', text: 'One battery, three tools' },

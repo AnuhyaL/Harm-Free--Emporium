@@ -334,6 +334,8 @@ export interface Post {
   publishedAt: ISODate;
   readMinutes: number;
   hue: number;
+  /** Cover photo; falls back to generated art when absent. */
+  image?: { src: string; alt: string };
   body: PostBlock[];
   relatedProductSlugs: string[];
 }
